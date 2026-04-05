@@ -2,6 +2,7 @@
 import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
+import time
 
 from tutor_ib import tutor_ib_fisica
 from ecuaciones_ib import ecuaciones_ib
@@ -112,26 +113,40 @@ with tabs[1]:
 # =========================
 with tabs[2]:
 
-    st.header("🎛️ Simulación MUA")
+ st.header("🎛️ Simulación animada MUA")
 
     u = st.slider("Velocidad inicial (u)", -10.0, 20.0, 0.0)
     a = st.slider("Aceleración (a)", -10.0, 10.0, 1.0)
     t_max = st.slider("Tiempo máximo", 1.0, 20.0, 10.0)
 
-    t_vals = np.linspace(0, t_max, 100)
-    s_vals = u * t_vals + 0.5 * a * t_vals**2
+    iniciar = st.button("▶ Iniciar simulación")
 
-    fig, ax = plt.subplots()
+    placeholder = st.empty()
 
-    ax.plot(t_vals, s_vals, label="Trayectoria")
-    ax.set_xlabel("Tiempo")
-    ax.set_ylabel("Posición")
-    ax.set_title("Movimiento Uniformemente Acelerado")
-    ax.grid()
-    ax.legend()
+    if iniciar:
 
-    st.pyplot(fig)
+        t_vals = np.linspace(0, t_max, 100)
+        s_vals = u * t_vals + 0.5 * a * t_vals**2
 
+        for i in range(len(t_vals)):
+
+            fig, ax = plt.subplots()
+
+            ax.plot(t_vals, s_vals, linestyle="--", alpha=0.3)
+            ax.plot(t_vals[i], s_vals[i], "ro")
+
+            ax.set_xlim(0, t_max)
+            ax.set_ylim(min(0, np.min(s_vals)), max(1, np.max(s_vals)))
+
+            ax.set_xlabel("Tiempo")
+            ax.set_ylabel("Posición")
+            ax.set_title("Movimiento Uniformemente Acelerado")
+            ax.grid()
+
+            placeholder.pyplot(fig)
+            plt.close(fig)
+
+            time.sleep(0.03)
 
 # =========================
 # 🧪 GENERADOR
