@@ -28,12 +28,7 @@ tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador", "🧪 Gene
 st.markdown("""
 <hr>
 <p style='text-align: center; color: gray;'>
-Desarrollado por <b>Jhon Jairo GAlán Rincón</b> 🚀
-</p>
-""", unsafe_allow_html=True)st.markdown("""
-<hr>
-<p style='text-align: center; color: gray;'>
-Desarrollado por <b>Tu Nombre o Empresa</b> 🚀
+Desarrollado por <b>Jhon Jairo Galán Rincón</b> 🚀
 </p>
 """, unsafe_allow_html=True)
 # =========================
