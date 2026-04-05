@@ -24,7 +24,7 @@ with col1:
 with col2:
     st.image("Imagen2.png", width=200)
 
-tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador", "🧪 Generador"])
+tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🧪 Generador"])
 
 st.markdown("""
 <hr>
@@ -149,9 +149,55 @@ with tabs[2]:
             time.sleep(0.03)
 
 # =========================
-# 🧪 GENERADOR
+# 🎯 Simulación: Tiro Parabólico
 # =========================
+
 with tabs[3]:
+
+    st.header("🎯 Simulación: Tiro Parabólico")
+
+    v0 = st.slider("Velocidad inicial (m/s)", 1.0, 50.0, 20.0)
+    angulo = st.slider("Ángulo (grados)", 0.0, 90.0, 45.0)
+    g = st.slider("Gravedad (m/s²)", 1.0, 20.0, 9.8)
+
+    iniciar = st.button("▶ Iniciar simulación parabólica")
+
+    placeholder = st.empty()
+
+    if iniciar:
+
+        theta = np.radians(angulo)
+
+        t_total = (2 * v0 * np.sin(theta)) / g
+        t_vals = np.linspace(0, t_total, 100)
+
+        x_vals = v0 * np.cos(theta) * t_vals
+        y_vals = v0 * np.sin(theta) * t_vals - 0.5 * g * t_vals**2
+
+        for i in range(len(t_vals)):
+
+            fig, ax = plt.subplots()
+
+            ax.plot(x_vals, y_vals, linestyle="--", alpha=0.3)
+            ax.plot(x_vals[i], y_vals[i], "ro")
+
+            ax.set_xlim(0, max(x_vals) * 1.1)
+            ax.set_ylim(0, max(y_vals) * 1.1)
+
+            ax.set_xlabel("Distancia (m)")
+            ax.set_ylabel("Altura (m)")
+            ax.set_title("Tiro Parabólico")
+            ax.grid()
+
+            placeholder.pyplot(fig)
+            plt.close(fig)
+
+            time.sleep(0.03)
+
+# =========================
+# 🧪 GENERADOR PREGUNTAS
+# =========================
+with tabs[4]:
 
     st.header("🧪 Generador de preguntas IB")
 
