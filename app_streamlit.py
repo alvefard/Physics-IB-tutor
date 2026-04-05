@@ -24,7 +24,7 @@ with col1:
 with col2:
     st.image("Imagen2.png", width=200)
 
-tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🧪 Generador"])
+tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🌌 Estrellas", "🧪 Generador"])
 
 st.markdown("""
 <hr>
@@ -195,9 +195,77 @@ with tabs[3]:
             time.sleep(0.03)
 
 # =========================
-# 🧪 GENERADOR PREGUNTAS
+# 🌌 Estrellas
 # =========================
 with tabs[4]:
+
+    st.header("🌌 Temperatura de Estrellas (Cuerpo Negro)")
+
+    # Slider temperatura
+    T = st.slider("Temperatura (K)", 3000, 10000, 5500)
+
+    # Constantes
+    h = 6.626e-34
+    c = 3e8
+    k = 1.38e-23
+    b = 2.898e-3  # constante de Wien
+
+    # Longitud de onda (m)
+    lambda_vals = np.linspace(1e-7, 3e-6, 500)
+
+    # Ley de Planck
+    def planck(l, T):
+        return (2*h*c**2) / (l**5) * (1 / (np.exp((h*c)/(l*k*T)) - 1))
+
+    intensidad = planck(lambda_vals, T)
+
+    # Longitud de onda pico (Wien)
+    lambda_max = b / T  # metros
+    lambda_max_nm = lambda_max * 1e9
+
+    # 🎨 Color aproximado
+    def color_estrella(T):
+        if T < 4000:
+            return "red"
+        elif T < 6000:
+            return "orange"
+        elif T < 7500:
+            return "white"
+        else:
+            return "blue"
+
+    color = color_estrella(T)
+
+    # 📊 Gráfica
+    fig, ax = plt.subplots()
+
+    ax.plot(lambda_vals * 1e9, intensidad, color=color)
+    ax.axvline(lambda_max_nm, linestyle="--", color="gray", label="λ pico")
+
+    ax.set_xlabel("Longitud de onda (nm)")
+    ax.set_ylabel("Intensidad")
+    ax.set_title(f"Cuerpo negro a {T} K")
+    ax.legend()
+    ax.grid()
+
+    st.pyplot(fig)
+
+    # 📊 Resultados
+    st.write(f"🔬 Longitud de onda pico: {lambda_max_nm:.0f} nm")
+
+    # 🌈 Interpretación
+    if lambda_max_nm < 450:
+        st.write("🔵 Estrella azul (muy caliente)")
+    elif lambda_max_nm < 600:
+        st.write("⚪ Estrella blanca/amarilla (tipo Sol)")
+    else:
+        st.write("🔴 Estrella roja (más fría)")
+
+
+# =========================
+# 🧪 GENERADOR PREGUNTAS
+# =========================
+with tabs[5]:
 
     st.header("🧪 Generador de preguntas IB")
 
