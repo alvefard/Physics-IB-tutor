@@ -243,91 +243,102 @@ with tabs[4]:
 
     st.header("🌌 Temperatura de Estrellas (Cuerpo Negro)")
 
-    T = st.slider("Temperatura (K)", 3000, 10000, 5500)
+    col1, col2 = st.columns([1, 2])  # 👈 layout profesional
 
-    # Constantes
-    h = 6.626e-34
-    c = 3e8
-    k = 1.38e-23
-    b = 2.898e-3  # Wien
+    # =========================
+    # 🎛️ CONTROLES (IZQUIERDA)
+    # =========================
+    with col1:
 
-    # Longitudes de onda
-    lambda_vals = np.linspace(1e-7, 3e-6, 500)
+        T = st.slider("Temperatura (K)", 3000, 10000, 5500)
 
-    def planck(l, T):
-        return (2*h*c**2)/(l**5) * (1/(np.exp((h*c)/(l*k*T)) - 1))
+        # Constantes
+        h = 6.626e-34
+        c = 3e8
+        k = 1.38e-23
+        b = 2.898e-3
 
-    intensidad = planck(lambda_vals, T)
+        # Wien
+        lambda_max = b / T
+        lambda_max_nm = lambda_max * 1e9
 
-    # Wien
-    lambda_max = b / T
-    lambda_max_nm = lambda_max * 1e9
+        st.write(f"🔬 λ pico: {lambda_max_nm:.0f} nm")
 
-    # 🎨 función color visible
-    def wavelength_to_rgb(wavelength):
-        if wavelength < 380 or wavelength > 780:
-            return (0, 0, 0)
-
-        if wavelength < 440:
-            r = -(wavelength - 440) / (440 - 380)
-            g = 0.0
-            b = 1.0
-        elif wavelength < 490:
-            r = 0.0
-            g = (wavelength - 440) / (490 - 440)
-            b = 1.0
-        elif wavelength < 510:
-            r = 0.0
-            g = 1.0
-            b = -(wavelength - 510) / (510 - 490)
-        elif wavelength < 580:
-            r = (wavelength - 510) / (580 - 510)
-            g = 1.0
-            b = 0.0
-        elif wavelength < 645:
-            r = 1.0
-            g = -(wavelength - 645) / (645 - 580)
-            b = 0.0
+        if lambda_max_nm < 450:
+            st.write("🔵 Estrella azul")
+        elif lambda_max_nm < 600:
+            st.write("🟡 Estrella tipo Sol")
         else:
-            r = 1.0
-            g = 0.0
-            b = 0.0
+            st.write("🔴 Estrella roja")
 
-        return (r, g, b)
+    # =========================
+    # 📊 GRÁFICA (DERECHA)
+    # =========================
+    with col2:
 
-    # 📊 Gráfica
-    fig, ax = plt.subplots(figsize=(8,5))
+        lambda_vals = np.linspace(1e-7, 3e-6, 500)
 
-    ax.plot(lambda_vals * 1e9, intensidad, color="black")
+        def planck(l, T):
+            return (2*h*c**2)/(l**5) * (1/(np.exp((h*c)/(l*k*T)) - 1))
 
-    # Línea pico
-    ax.axvline(lambda_max_nm, linestyle="--", color="red", label="λ pico")
+        intensidad = planck(lambda_vals, T)
 
-    # 🌈 ESPECTRO VISIBLE
-    visible_range = np.linspace(380, 780, 200)
+        # 🎨 función color visible
+        def wavelength_to_rgb(wavelength):
 
-    for wl in visible_range:
-        color = wavelength_to_rgb(wl)
-        ax.axvspan(wl, wl+2, color=color, alpha=0.3)
+            if wavelength < 380 or wavelength > 780:
+                return (0, 0, 0)
 
-    ax.set_xlabel("Longitud de onda (nm)")
-    ax.set_ylabel("Intensidad")
-    ax.set_title(f"Cuerpo negro a {T} K")
-    ax.legend()
-    ax.grid()
+            if wavelength < 440:
+                r = -(wavelength - 440) / (440 - 380)
+                g = 0
+                b = 1
+            elif wavelength < 490:
+                r = 0
+                g = (wavelength - 440) / (490 - 440)
+                b = 1
+            elif wavelength < 510:
+                r = 0
+                g = 1
+                b = -(wavelength - 510) / (510 - 490)
+            elif wavelength < 580:
+                r = (wavelength - 510) / (580 - 510)
+                g = 1
+                b = 0
+            elif wavelength < 645:
+                r = 1
+                g = -(wavelength - 645) / (645 - 580)
+                b = 0
+            else:
+                r = 1
+                g = 0
+                b = 0
 
-    st.pyplot(fig)
+            return (r, g, b)
 
-    # 📊 Resultados
-    st.write(f"🔬 Longitud de onda pico: {lambda_max_nm:.0f} nm")
+        # 📊 Gráfica compacta
+        fig, ax = plt.subplots(figsize=(6, 2.5))  # 👈 tamaño optimizado
 
-    # 🌈 Interpretación IB
-    if lambda_max_nm < 450:
-        st.write("🔵 Estrella azul (alta temperatura)")
-    elif lambda_max_nm < 600:
-        st.write("🟡 Estrella tipo Sol")
-    else:
-        st.write("🔴 Estrella roja (más fría)")
+        ax.plot(lambda_vals * 1e9, intensidad, color="black")
+
+        ax.axvline(lambda_max_nm, linestyle="--", color="red", label="λ pico")
+
+        # 🌈 espectro visible
+        visible_range = np.linspace(380, 780, 200)
+
+        for wl in visible_range:
+            color = wavelength_to_rgb(wl)
+            ax.axvspan(wl, wl+2, color=color, alpha=0.3)
+
+        ax.set_xlabel("Longitud de onda (nm)")
+        ax.set_ylabel("Intensidad")
+        ax.set_title(f"Cuerpo negro a {T} K")
+        ax.legend()
+        ax.grid()
+
+        plt.tight_layout()
+
+        st.pyplot(fig, use_container_width=True)
 # =========================
 # 📡 Espectro Electromagnético
 # =========================
