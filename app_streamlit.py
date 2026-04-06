@@ -346,10 +346,10 @@ with tabs[5]:
 
     st.header("📡 Simulación: Espectro Electromagnético")
 
-    col1, col2 = st.columns([1, 2])  # 👈 layout
+    col1, col2 = st.columns([1, 2])
 
     # =========================
-    # 🎛️ CONTROLES + RESULTADOS (IZQUIERDA)
+    # IZQUIERDA
     # =========================
     with col1:
 
@@ -364,7 +364,6 @@ with tabs[5]:
         frecuencia = c / lambda_val
         energia = h * frecuencia
 
-        # Clasificación
         def region_em(lambda_m):
             if lambda_m > 1:
                 return "Radio 📻"
@@ -389,87 +388,46 @@ with tabs[5]:
         st.write(f"⚡ E: {energia:.2e} J")
 
     # =========================
-    # 📊 VISUALIZACIÓN (DERECHA)
+    # DERECHA (ONDA)
     # =========================
-   with col2:
+    with col2:
 
-    x = np.linspace(0, 10, 1000)
+        x = np.linspace(0, 10, 1000)
 
-    # Escalado visual
-    escala = 1e6
-    lambda_plot = lambda_val * escala
+        escala = 1e6
+        lambda_plot = lambda_val * escala
 
-    if lambda_plot == 0:
-        lambda_plot = 1e-6
+        if lambda_plot == 0:
+            lambda_plot = 1e-6
 
-    k = 2 * np.pi / lambda_plot
+        k = 2 * np.pi / lambda_plot
 
-    y = np.sin(k * x)
+        y = np.sin(k * x)
 
-    fig, ax = plt.subplots(figsize=(6, 2.5))
+        fig, ax = plt.subplots(figsize=(6, 2.5))
 
-    # Color según región
-    color = "blue"
+        color = "blue"
+        if "Visible" in region:
+            color = "orange"
+        elif "Gamma" in region:
+            color = "purple"
+        elif "Radio" in region:
+            color = "green"
 
-    if "Visible" in region:
-        color = "orange"
-    elif "Gamma" in region:
-        color = "purple"
-    elif "Radio" in region:
-        color = "green"
+        ax.plot(x, y, color=color)
 
-    ax.plot(x, y, color=color)
+        ax.set_ylim(-1.2, 1.2)
+        ax.set_xlim(0, 10)
 
-    ax.set_ylim(-1.2, 1.2)
-    ax.set_xlim(0, 10)
+        ax.set_title(f"Onda EM ({region})")
+        ax.set_xlabel("Espacio")
+        ax.set_ylabel("Amplitud")
 
-    ax.set_title(f"Onda EM ({region})")
-    ax.set_xlabel("Espacio")
-    ax.set_ylabel("Amplitud")
+        ax.grid()
 
-    ax.grid()
+        plt.tight_layout()
 
-    plt.tight_layout()
-
-    st.pyplot(fig, use_container_width=True)
-🎯 REGLA CLAVE
-
-Siempre:
-
-with algo:
-    # 👈 TODO con indentación
-⚠️ ERRORES MÁS COMUNES
-
-❌ Olvidar sangría después de with
-❌ Mezclar tabs y espacios
-❌ Pegar código mal alineado
-
-🧠 TIP PRO (rápido)
-
-Selecciona el bloque y presiona:
-
-Shift + Tab
-
-👉 hasta que todo quede alineado
-
-🚀 RESULTADO
-
-Después de esto:
-
-✅ No error
-✅ Onda aparece correctamente
-✅ Simulación funciona
-
-🔥 SIGUIENTE NIVEL
-
-Podemos hacer algo MUY potente:
-
-👉 onda EM animada (propagación real)
-👉 campo eléctrico + magnético
-👉 visualización 3D básica
-
-Solo dime:
-“haz onda electromagnética animada completa” ⚡🌊
+        st.pyplot(fig, use_container_width=True)
 # =========================
 # 🌊 Onda Viajera
 # =========================
