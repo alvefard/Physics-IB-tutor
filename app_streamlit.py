@@ -183,43 +183,58 @@ with tabs[3]:
 
     st.header("🎯 Simulación: Tiro Parabólico")
 
-    v0 = st.slider("Velocidad inicial (m/s)", 1.0, 50.0, 20.0)
-    angulo = st.slider("Ángulo (grados)", 0.0, 90.0, 45.0)
-    g = st.slider("Gravedad (m/s²)", 1.0, 20.0, 9.8)
+    col1, col2 = st.columns([1, 2])  # 👈 layout
 
-    iniciar = st.button("▶ Iniciar simulación parabólica")
+    # =========================
+    # 🎛️ CONTROLES (IZQUIERDA)
+    # =========================
+    with col1:
 
-    placeholder = st.empty()
+        v0 = st.slider("Velocidad inicial (m/s)", 1.0, 50.0, 20.0)
+        angulo = st.slider("Ángulo (grados)", 0.0, 90.0, 45.0)
+        g = st.slider("Gravedad (m/s²)", 1.0, 20.0, 9.8)
 
-    if iniciar:
+        iniciar = st.button("▶ Iniciar simulación parabólica")
 
-        theta = np.radians(angulo)
+    # =========================
+    # 📊 SIMULACIÓN (DERECHA)
+    # =========================
+    with col2:
 
-        t_total = (2 * v0 * np.sin(theta)) / g
-        t_vals = np.linspace(0, t_total, 100)
+        placeholder = st.empty()
 
-        x_vals = v0 * np.cos(theta) * t_vals
-        y_vals = v0 * np.sin(theta) * t_vals - 0.5 * g * t_vals**2
+        if iniciar:
 
-        for i in range(len(t_vals)):
+            theta = np.radians(angulo)
 
-            fig, ax = plt.subplots()
+            t_total = (2 * v0 * np.sin(theta)) / g
+            t_vals = np.linspace(0, t_total, 100)
 
-            ax.plot(x_vals, y_vals, linestyle="--", alpha=0.3)
-            ax.plot(x_vals[i], y_vals[i], "ro")
+            x_vals = v0 * np.cos(theta) * t_vals
+            y_vals = v0 * np.sin(theta) * t_vals - 0.5 * g * t_vals**2
 
-            ax.set_xlim(0, max(x_vals) * 1.1)
-            ax.set_ylim(0, max(y_vals) * 1.1)
+            for i in range(len(t_vals)):
 
-            ax.set_xlabel("Distancia (m)")
-            ax.set_ylabel("Altura (m)")
-            ax.set_title("Tiro Parabólico")
-            ax.grid()
+                fig, ax = plt.subplots(figsize=(6, 2.5))  # 👈 compacto
 
-            placeholder.pyplot(fig)
-            plt.close(fig)
+                ax.plot(x_vals, y_vals, linestyle="--", alpha=0.3)
+                ax.plot(x_vals[i], y_vals[i], "ro")
 
-            time.sleep(0.03)
+                ax.set_xlim(0, max(x_vals) * 1.1)
+                ax.set_ylim(0, max(y_vals) * 1.1)
+
+                ax.set_xlabel("Distancia (m)")
+                ax.set_ylabel("Altura (m)")
+                ax.set_title("Tiro Parabólico")
+                ax.grid()
+
+                plt.tight_layout()
+
+                placeholder.pyplot(fig, use_container_width=True)
+
+                plt.close(fig)
+
+                time.sleep(0.03)
 
 # =========================
 # 🌌 Estrellas
