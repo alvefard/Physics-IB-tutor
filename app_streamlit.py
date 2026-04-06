@@ -95,7 +95,7 @@ with tabs[1]:
             if np.isscalar(y_vals):
                 y_vals = np.full_like(x_vals, y_vals)
 
-            fig, ax = plt.subplots()
+            fig, ax = plt.subplots(figsize=(6,2.5))
             ax.plot(x_vals, y_vals)
             ax.set_xlabel(var_x)
             ax.set_ylabel(izquierda)
