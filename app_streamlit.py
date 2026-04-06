@@ -8,7 +8,7 @@ from tutor_ib import tutor_ib_fisica
 from ecuaciones_ib import ecuaciones_ib
 from cliente_openai import preguntar_chatgpt
 
-
+plt.rcParams["figure.figsize"] = (6, 3)
 # =========================
 # CONFIG
 # =========================
