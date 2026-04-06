@@ -24,7 +24,7 @@ with col1:
 with col2:
     st.image("Imagen2.png", width=200)
 
-tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🌌 Estrellas", "📡 Espectro EM", "🌊 Onda", "🧪 Generador"])
+tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🌌 Estrellas", "📡 Espectro EM", "🌊 Onda", "🧪 Generador", "📋 Investigación Interna"])
 
 st.markdown("""
 <hr>
@@ -439,3 +439,154 @@ Sin solución.
             st.write(respuesta)
         else:
             st.warning("Escribe un tema")
+
+# =========================
+# 📋 Autoevaluación Investigación Interna (IB)
+# =========================
+
+with tabs[8]:
+
+    st.header("📋 Autoevaluación Investigación Interna (IB)")
+
+    st.markdown("Marca los indicadores que cumple tu trabajo:")
+
+    # =========================
+    # 🧠 CRITERIO A: DISEÑO
+    # =========================
+
+    st.subheader("A. Diseño de la investigación")
+
+    A_checks = [
+        st.checkbox("Pregunta clara y contextualizada"),
+        st.checkbox("Variables identificadas correctamente"),
+        st.checkbox("Variables controladas adecuadamente"),
+        st.checkbox("Instrumentos con precisión definida"),
+        st.checkbox("Procedimiento detallado y reproducible"),
+        st.checkbox("Método permite recolectar datos suficientes"),
+        st.checkbox("Contexto físico bien justificado")
+    ]
+
+    A_score = sum(A_checks)
+
+    if A_score <= 2:
+        A_level = 1
+    elif A_score <= 4:
+        A_level = 3
+    elif A_score <= 6:
+        A_level = 5
+    else:
+        A_level = 6
+
+    st.write(f"🔢 Nivel estimado: {A_level}/6")
+
+    # =========================
+    # 📊 CRITERIO B: ANÁLISIS
+    # =========================
+
+    st.subheader("B. Análisis de datos")
+
+    B_checks = [
+        st.checkbox("Tablas con unidades correctas"),
+        st.checkbox("Gráficas bien construidas"),
+        st.checkbox("Procesamiento de datos correcto"),
+        st.checkbox("Cálculo de incertidumbres"),
+        st.checkbox("Propagación de incertidumbres"),
+        st.checkbox("Ajuste de curvas / pendiente"),
+        st.checkbox("Interpretación física de resultados")
+    ]
+
+    B_score = sum(B_checks)
+
+    if B_score <= 2:
+        B_level = 1
+    elif B_score <= 4:
+        B_level = 3
+    elif B_score <= 6:
+        B_level = 5
+    else:
+        B_level = 6
+
+    st.write(f"🔢 Nivel estimado: {B_level}/6")
+
+    # =========================
+    # 🧾 CRITERIO C: CONCLUSIONES
+    # =========================
+
+    st.subheader("C. Conclusiones")
+
+    C_checks = [
+        st.checkbox("Conclusión responde la pregunta"),
+        st.checkbox("Uso de datos en la conclusión"),
+        st.checkbox("Relación con teoría física"),
+        st.checkbox("Análisis de error porcentual"),
+        st.checkbox("Discusión de discrepancias"),
+        st.checkbox("Argumentación científica clara")
+    ]
+
+    C_score = sum(C_checks)
+
+    if C_score <= 2:
+        C_level = 1
+    elif C_score <= 3:
+        C_level = 3
+    elif C_score <= 5:
+        C_level = 5
+    else:
+        C_level = 6
+
+    st.write(f"🔢 Nivel estimado: {C_level}/6")
+
+    # =========================
+    # 🔍 CRITERIO D: EVALUACIÓN
+    # =========================
+
+    st.subheader("D. Evaluación")
+
+    D_checks = [
+        st.checkbox("Identifica limitaciones reales"),
+        st.checkbox("Explica impacto de errores"),
+        st.checkbox("Propone mejoras específicas"),
+        st.checkbox("Relaciona errores con resultados"),
+        st.checkbox("Análisis cuantitativo del error"),
+        st.checkbox("Propuestas científicamente justificadas")
+    ]
+
+    D_score = sum(D_checks)
+
+    if D_score <= 2:
+        D_level = 1
+    elif D_score <= 3:
+        D_level = 3
+    elif D_score <= 5:
+        D_level = 5
+    else:
+        D_level = 6
+
+    st.write(f"🔢 Nivel estimado: {D_level}/6")
+
+    # =========================
+    # 🎯 NOTA FINAL
+    # =========================
+
+    st.markdown("---")
+
+    total = A_level + B_level + C_level + D_level
+
+    st.subheader("🎯 Resultado final")
+
+    st.write(f"📊 Diseño: {A_level}/6")
+    st.write(f"📊 Análisis: {B_level}/6")
+    st.write(f"📊 Conclusiones: {C_level}/6")
+    st.write(f"📊 Evaluación: {D_level}/6")
+
+    st.success(f"🏆 Puntaje total estimado: {total}/24")
+
+    # Interpretación
+    if total >= 20:
+        st.success("Nivel IB: Excelente 🔥")
+    elif total >= 16:
+        st.info("Nivel IB: Bueno 👍")
+    elif total >= 10:
+        st.warning("Nivel IB: Básico ⚠️")
+    else:
+        st.error("Nivel IB: Bajo ❌")
