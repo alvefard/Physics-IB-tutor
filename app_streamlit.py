@@ -127,38 +127,53 @@ with tabs[2]:
 
     st.header("🎛️ Simulación animada MUA")
 
-    u = st.slider("Velocidad inicial (u)", -10.0, 20.0, 0.0)
-    a = st.slider("Aceleración (a)", -10.0, 10.0, 1.0)
-    t_max = st.slider("Tiempo máximo", 1.0, 20.0, 10.0)
+    col1, col2 = st.columns([1, 2])  # 👈 layout
 
-    iniciar = st.button("▶ Iniciar simulación")
+    # =========================
+    # 🎛️ CONTROLES (IZQUIERDA)
+    # =========================
+    with col1:
 
-    placeholder = st.empty()
+        u = st.slider("Velocidad inicial (u)", -10.0, 20.0, 0.0)
+        a = st.slider("Aceleración (a)", -10.0, 10.0, 1.0)
+        t_max = st.slider("Tiempo máximo", 1.0, 20.0, 10.0)
 
-    if iniciar:
+        iniciar = st.button("▶ Iniciar simulación")
 
-        t_vals = np.linspace(0, t_max, 100)
-        s_vals = u * t_vals + 0.5 * a * t_vals**2
+    # =========================
+    # 📊 SIMULACIÓN (DERECHA)
+    # =========================
+    with col2:
 
-        for i in range(len(t_vals)):
+        placeholder = st.empty()
 
-            fig, ax = plt.subplots()
+        if iniciar:
 
-            ax.plot(t_vals, s_vals, linestyle="--", alpha=0.3)
-            ax.plot(t_vals[i], s_vals[i], "ro")
+            t_vals = np.linspace(0, t_max, 100)
+            s_vals = u * t_vals + 0.5 * a * t_vals**2
 
-            ax.set_xlim(0, t_max)
-            ax.set_ylim(min(0, np.min(s_vals)), max(1, np.max(s_vals)))
+            for i in range(len(t_vals)):
 
-            ax.set_xlabel("Tiempo")
-            ax.set_ylabel("Posición")
-            ax.set_title("Movimiento Uniformemente Acelerado")
-            ax.grid()
+                fig, ax = plt.subplots(figsize=(6, 2.5))  # 👈 compacto
 
-            placeholder.pyplot(fig)
-            plt.close(fig)
+                ax.plot(t_vals, s_vals, linestyle="--", alpha=0.3)
+                ax.plot(t_vals[i], s_vals[i], "ro")
 
-            time.sleep(0.03)
+                ax.set_xlim(0, t_max)
+                ax.set_ylim(min(0, np.min(s_vals)), max(1, np.max(s_vals)))
+
+                ax.set_xlabel("Tiempo")
+                ax.set_ylabel("Posición")
+                ax.set_title("Movimiento Uniformemente Acelerado")
+                ax.grid()
+
+                plt.tight_layout()
+
+                placeholder.pyplot(fig, use_container_width=True)
+
+                plt.close(fig)
+
+                time.sleep(0.03)
 
 # =========================
 # 🎯 Simulación: Tiro Parabólico
