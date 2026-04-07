@@ -707,10 +707,10 @@ NO seas genérico. Sé específico como un evaluador IB.
 # ⏱️ Gestión de Exámenes IB"
 # =========================
 
-with tabs[9]:
+with tabs[8]:
 
     # =========================
-    # 🎨 ESTILO (LETRA GRANDE)
+    # 🎨 ESTILO
     # =========================
     st.markdown("""
         <style>
@@ -728,46 +728,29 @@ with tabs[9]:
     st.header("⏱️ Gestión de Exámenes IB")
 
     # =========================
-    # 🕒 HORA COLOMBIA (SIN BUCLE)
+    # 🕒 HORA COLOMBIA
     # =========================
     ahora = datetime.datetime.now(ZoneInfo("America/Bogota"))
 
-    # =========================
-    # 📐 COLUMNAS
-    # =========================
     col1, col2 = st.columns([1, 1])
 
     # =========================
-    # 🧠 IZQUIERDA (CONFIGURACIÓN)
+    # 🧠 IZQUIERDA
     # =========================
     with col1:
 
-        st.markdown("### 🧪 Configuración")
+        st.subheader("🧪 Configuración")
 
         examenes = [
             ("Biology NM P1", "Estructurado", 90),
             ("Biology NM P2", "Estructurado", 90),
-            ("Gestión NM NS P1", "No estructurado", 90),
             ("Gestión NS P3", "No estructurado", 75),
-            ("Gestión Empresarial NM P2", "Estructurado", 90),
-            ("Gestión Empresarial NS P2", "No estructurado", 105),
             ("Lengua y Lit. NS P1", "No estructurado", 135),
-            ("Lengua y Lit. NS P2", "No estructurado", 105),
             ("Chemistry NM P1", "Estructurado", 90),
-            ("Chemistry NM P2", "Estructurado", 90),
-            ("Historia NM P2", "No estructurado", 90),
-            ("Historia NS P3", "No estructurado", 150),
             ("Física NM P1", "Estructurado", 90),
             ("Física NM P2", "Estructurado", 90),
-            ("Inglés B NS P1", "Estructurado", 90),
-            ("Inglés B NS Lectura", "Estructurado", 60),
-            ("Inglés B NS Auditiva", "Estructurado", 60),
-            ("Análisis NM P1", "Semiestructurado", 90),
-            ("Aplicaciones NM P1", "Estructurado", 90),
-            ("Política Global NS P2", "No estructurado", 165),
             ("ESS NM P1", "Estructurado", 60),
             ("ESS NM P2", "Estructurado", 120),
-            ("Filosofía NS P3", "No estructurado", 75),
         ]
 
         nombres = [e[0] for e in examenes]
@@ -781,36 +764,46 @@ with tabs[9]:
         st.markdown(f"<p class='medium-text'>🧪 Tipo: {tipo}</p>", unsafe_allow_html=True)
         st.markdown(f"<p class='medium-text'>⏱️ Duración: {duracion} min</p>", unsafe_allow_html=True)
 
-        hora_inicio = st.time_input("Hora de inicio")
+        # =========================
+        # ⏰ HORA PERSONALIZADA
+        # =========================
+        st.markdown("### ⏰ Hora de inicio")
 
-        inicio_dt = datetime.datetime.combine(datetime.date.today(), hora_inicio)
-        inicio_dt = inicio_dt.replace(tzinfo=ZoneInfo("America/Bogota"))
+        col_h1, col_h2 = st.columns(2)
+
+        with col_h1:
+            hora = st.selectbox("Hora", list(range(0, 24)), format_func=lambda x: f"{x:02d}")
+
+        with col_h2:
+            minuto = st.selectbox("Minuto", list(range(0, 60)), format_func=lambda x: f"{x:02d}")
+
+        # Crear datetime
+        inicio_dt = datetime.datetime.now(ZoneInfo("America/Bogota")).replace(
+            hour=hora, minute=minuto, second=0, microsecond=0
+        )
 
         fin_dt = inicio_dt + datetime.timedelta(minutes=duracion)
 
+        st.markdown(f"<p class='medium-text'>🕒 Inicio: {inicio_dt.time()}</p>", unsafe_allow_html=True)
         st.markdown(f"<p class='medium-text'>🕒 Fin: {fin_dt.time()}</p>", unsafe_allow_html=True)
 
         # =========================
-        # 🚻 BAÑO
+        # 🚻 BAÑO AUTOMÁTICO (IB REAL)
         # =========================
-        if duracion > 60:
+        if duracion > 75:
 
-            st.markdown("### 🚻 Baño")
+            salida_inicio = inicio_dt + datetime.timedelta(minutes=60)
+            salida_fin = fin_dt - datetime.timedelta(minutes=15)
 
-            salida_permitida = st.checkbox("Permitir salida")
+            st.markdown("### 🚻 Salida al baño (automática)")
 
-            if salida_permitida:
-
-                salida_inicio = inicio_dt + datetime.timedelta(minutes=60)
-                salida_fin = fin_dt - datetime.timedelta(minutes=15)
-
-                st.success(f"Ventana: {salida_inicio.time()} → {salida_fin.time()}")
+            st.success(f"Ventana: {salida_inicio.time()} → {salida_fin.time()}")
 
         else:
-            st.warning("🚫 Sin salida al baño")
+            st.warning("🚫 No se permite salida al baño")
 
     # =========================
-    # ⏱️ DERECHA (RELOJ + ESTADO)
+    # ⏱️ DERECHA
     # =========================
     with col2:
 
@@ -822,7 +815,6 @@ with tabs[9]:
         )
 
         st.markdown("---")
-
         st.markdown("### 📊 Estado del examen")
 
         if ahora >= fin_dt:
