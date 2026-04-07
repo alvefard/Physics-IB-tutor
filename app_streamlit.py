@@ -353,7 +353,7 @@ with tabs[5]:
     col1, col2 = st.columns([1, 2])
 
     # =========================
-    # IZQUIERDA
+    # 🎛️ CONTROLES (IZQUIERDA)
     # =========================
     with col1:
 
@@ -368,70 +368,97 @@ with tabs[5]:
         frecuencia = c / lambda_val
         energia = h * frecuencia
 
-        def region_em(lambda_m):
-            if lambda_m > 1:
-                return "Radio 📻"
-            elif lambda_m > 1e-3:
-                return "Microondas 📡"
-            elif lambda_m > 7e-7:
-                return "Infrarrojo 🔥"
-            elif lambda_m > 4e-7:
-                return "Visible 🌈"
-            elif lambda_m > 1e-8:
-                return "Ultravioleta ☀️"
-            elif lambda_m > 1e-11:
-                return "Rayos X 🩻"
-            else:
-                return "Rayos Gamma ☢️"
-
-        region = region_em(lambda_val)
-
-        st.write(f"📍 Región: **{region}**")
-        st.write(f"📏 λ: {lambda_val:.2e} m")
-        st.write(f"🔁 f: {frecuencia:.2e} Hz")
-        st.write(f"⚡ E: {energia:.2e} J")
+        st.markdown("### 📊 Datos físicos")
+        st.write(f"📏 λ = {lambda_val:.2e} m")
+        st.write(f"🔁 f = {frecuencia:.2e} Hz")
+        st.write(f"⚡ E = {energia:.2e} J")
 
     # =========================
-    # DERECHA (ONDA)
+    # 📊 VISUAL (DERECHA)
     # =========================
     with col2:
 
-        x = np.linspace(0, 10, 1000)
+        x = np.linspace(-12, 3, 1000)
 
-        escala = 1e6
-        lambda_plot = lambda_val * escala
+        fig, ax = plt.subplots(figsize=(10, 2.5))
 
-        if lambda_plot == 0:
-            lambda_plot = 1e-6
+        # =========================
+        # 🌈 ESPECTRO CON COLORES
+        # =========================
+        for i in range(len(x)-1):
 
-        k = 2 * np.pi / lambda_plot
+            wl = 10**x[i] * 1e9  # nm
 
-        y = np.sin(k * x)
+            if 380 <= wl <= 780:
 
-        fig, ax = plt.subplots(figsize=(6, 2.5))
+                if wl < 440:
+                    color = (-(wl - 440)/(440-380), 0, 1)
+                elif wl < 490:
+                    color = (0, (wl-440)/(490-440), 1)
+                elif wl < 510:
+                    color = (0, 1, -(wl-510)/(510-490))
+                elif wl < 580:
+                    color = ((wl-510)/(580-510), 1, 0)
+                elif wl < 645:
+                    color = (1, -(wl-645)/(645-580), 0)
+                else:
+                    color = (1, 0, 0)
 
-        color = "blue"
-        if "Visible" in region:
-            color = "orange"
-        elif "Gamma" in region:
-            color = "purple"
-        elif "Radio" in region:
-            color = "green"
+            else:
+                color = "lightgray"
 
-        ax.plot(x, y, color=color)
+            ax.axvspan(x[i], x[i+1], color=color)
 
-        ax.set_ylim(-1.2, 1.2)
-        ax.set_xlim(0, 10)
+        # =========================
+        # 🌊 ONDA ENCIMA
+        # =========================
+        escala = (log_lambda + 12) / 15
+        freq_visual = 5 + 30 * escala
 
-        ax.set_title(f"Onda EM ({region})")
-        ax.set_xlabel("Espacio")
-        ax.set_ylabel("Amplitud")
+        onda = np.sin(freq_visual * x)
 
-        ax.grid()
+        ax.plot(x, onda, color="black", linewidth=1.5)
+
+        # =========================
+        # 📍 MARCADOR
+        # =========================
+        ax.axvline(log_lambda, color="red", linewidth=3)
+
+        # =========================
+        # 🧠 ETIQUETAS
+        # =========================
+        ax.set_yticks([])
+
+        ax.set_xticks([-12, -9, -7, -5, -3, 0, 3])
+        ax.set_xticklabels([
+            "Gamma", "Rayos X", "UV", "Visible", "IR", "Micro", "Radio"
+        ])
+
+        ax.set_title("Espectro electromagnético (escala log λ)")
 
         plt.tight_layout()
 
         st.pyplot(fig, use_container_width=True)
+
+        # =========================
+        # 🧠 REGIÓN
+        # =========================
+        st.markdown("### 📍 Región del espectro")
+
+        if lambda_val > 1:
+            st.info("📻 Ondas de radio")
+        elif lambda_val > 1e-3:
+            st.info("📡 Microondas")
+        elif lambda_val > 7e-7:
+            st.info("🔥 Infrarrojo")
+        elif lambda_val > 4e-7:
+            st.success("🌈 Luz visible")
+        elif lambda_val > 1e-8:
+            st.warning("☀️ Ultravioleta")
+        elif lambda_val > 1e-11:
+            st.error("🩻 Rayos X")
+        else:
+            st.error("☢️ Rayos Gamma")
 # =========================
 # 🌊 Onda Viajera
 # =========================
