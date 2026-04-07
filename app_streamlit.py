@@ -739,9 +739,29 @@ NO seas genérico. Sé específico como un evaluador IB.
 with tabs[9]:
 
     # =========================
-    # 🔄 REFRESH
+    # 🔄 CONTROL DE REFRESH
     # =========================
-    st_autorefresh(interval=1000, key="reloj")
+    if "auto_refresh" not in st.session_state:
+        st.session_state.auto_refresh = False
+
+    col_btn1, col_btn2 = st.columns(2)
+
+    with col_btn1:
+        if st.button("▶ Activar reloj"):
+            st.session_state.auto_refresh = True
+
+    with col_btn2:
+        if st.button("⏸ Detener reloj"):
+            st.session_state.auto_refresh = False
+
+    if st.session_state.auto_refresh:
+        st_autorefresh(interval=1000, key="reloj")
+
+    # Indicador
+    if st.session_state.auto_refresh:
+        st.success("🟢 Reloj en vivo activo")
+    else:
+        st.info("⏸ Reloj detenido")
 
     # =========================
     # 🎨 ESTILO
@@ -850,7 +870,7 @@ with tabs[9]:
             salida_fin = fin_dt - datetime.timedelta(minutes=15)
 
             st.markdown("### 🚻 Salida al baño")
-            st.success(f"Ventana: {salida_inicio.time()} → {salida_fin.time()}")
+            st.success(f"{salida_inicio.time()} → {salida_fin.time()}")
 
         else:
             st.warning("🚫 No se permite salida al baño")
@@ -894,10 +914,7 @@ with tabs[9]:
             else:
                 estado = "⏳ NO INICIA"
 
-            st.markdown(
-                f"<div class='estado'>{estado}</div>",
-                unsafe_allow_html=True
-            )
+            st.markdown(f"<div class='estado'>{estado}</div>", unsafe_allow_html=True)
 
         else:
 
