@@ -24,7 +24,7 @@ with col1:
 with col2:
     st.image("FISICA.png", width=200)
 
-tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🌌 Estrellas", "📡 Espectro EM", "🌊 Onda", "🧪 Generador", "📋 Investigación Interna"])
+tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🌌 Estrellas", "📡 Espectro EM", "🌊 Onda", "🧪 Generador", "📋 Investigación Interna", "⏱️ Exámenes IB"])
 
 st.markdown("""
 <hr>
@@ -699,3 +699,87 @@ NO seas genérico. Sé específico como un evaluador IB.
 
         st.markdown("### 📊 Retroalimentación IA")
         st.write(feedback)
+        
+# =========================
+# ⏱️ Gestión de Exámenes IB"
+# =========================
+
+with tabs[9]:
+
+    st.header("⏱️ Gestión de Exámenes IB")
+
+    # =========================
+    # 📚 BASE DE DATOS
+    # =========================
+    examenes = [
+        ("Biology NM P1", "Estructurado", 90),
+        ("Biology NM P2", "Estructurado", 90),
+        ("Gestión NM NS P1", "No estructurado", 90),
+        ("Gestión NS P3", "No estructurado", 75),
+        ("Gestión Empresarial NM P2", "Estructurado", 90),
+        ("Gestión Empresarial NS P2", "No estructurado", 105),
+        ("Lengua y Lit. NS P1", "No estructurado", 135),
+        ("Lengua y Lit. NS P2", "No estructurado", 105),
+        ("Chemistry NM P1", "Estructurado", 90),
+        ("Chemistry NM P2", "Estructurado", 90),
+        ("Historia NM P2", "No estructurado", 90),
+        ("Historia NS P3", "No estructurado", 150),
+        ("Física NM P1", "Estructurado", 90),
+        ("Física NM P2", "Estructurado", 90),
+        ("Inglés B NS P1", "Estructurado", 90),
+        ("Inglés B NS Lectura", "Estructurado", 60),
+        ("Inglés B NS Auditiva", "Estructurado", 60),
+        ("Análisis NM P1", "Semiestructurado", 90),
+        ("Aplicaciones NM P1", "Estructurado", 90),
+        ("Política Global NS P2", "No estructurado", 165),
+        ("ESS NM P1", "Estructurado", 60),
+        ("ESS NM P2", "Estructurado", 120),
+        ("Filosofía NS P3", "No estructurado", 75),
+    ]
+
+    nombres = [e[0] for e in examenes]
+
+    # =========================
+    # 🎛️ SELECCIÓN
+    # =========================
+    seleccion = st.selectbox("Selecciona el examen", nombres)
+
+    examen = examenes[nombres.index(seleccion)]
+
+    tipo = examen[1]
+    duracion = examen[2]
+
+    st.write(f"🧪 Tipo de prueba: **{tipo}**")
+    st.write(f"⏱️ Duración: **{duracion} minutos**")
+
+    # =========================
+    # ⏰ HORA DE INICIO
+    # =========================
+    hora_inicio = st.time_input("Hora de inicio")
+
+    # Calcular hora fin
+    import datetime
+
+    inicio_dt = datetime.datetime.combine(datetime.date.today(), hora_inicio)
+    fin_dt = inicio_dt + datetime.timedelta(minutes=duracion)
+
+    st.success(f"🕒 Hora de finalización: {fin_dt.time()}")
+
+    # =========================
+    # 🚻 SALIDA AL BAÑO
+    # =========================
+    if duracion > 60:
+
+        st.markdown("### 🚻 Control de salida al baño")
+
+        salida_permitida = st.checkbox("Permitir salida al baño")
+
+        if salida_permitida:
+
+            # IB típico: después de 1 hora
+            tiempo_salida = inicio_dt + datetime.timedelta(minutes=60)
+
+            st.info(f"🚶‍♂️ Puede salir a partir de: {tiempo_salida.time()}")
+
+    else:
+        st.warning("🚫 No hay salida al baño (examen menor a 1 hora)")
