@@ -707,7 +707,7 @@ NO seas genérico. Sé específico como un evaluador IB.
 # ⏱️ Gestión de Exámenes IB"
 # =========================
 
-with tabs[8]:
+with tabs[9]:
 
     # =========================
     # 🎨 ESTILO (LETRA GRANDE)
