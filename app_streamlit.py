@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import time
 from streamlit_autorefresh import st_autorefresh
 import datetime
-from zoneinfo import ZoneInfo  # 👈 zona horaria
+from zoneinfo import ZoneInfo
 
 from tutor_ib import tutor_ib_fisica
 from ecuaciones_ib import ecuaciones_ib
@@ -710,21 +710,14 @@ NO seas genérico. Sé específico como un evaluador IB.
 with tabs[8]:
 
     # =========================
-    # ⏱️ AUTOREFRESH
-    # =========================
-    st_autorefresh(interval=1000, key="reloj")
-
-    # Hora Colombia
-    ahora = datetime.datetime.now(ZoneInfo("America/Bogota"))
-
-    # =========================
     # 🎨 ESTILO (LETRA GRANDE)
     # =========================
     st.markdown("""
         <style>
         .big-text {
-            font-size: 28px !important;
+            font-size: 42px !important;
             font-weight: bold;
+            text-align: center;
         }
         .medium-text {
             font-size: 22px !important;
@@ -733,6 +726,11 @@ with tabs[8]:
     """, unsafe_allow_html=True)
 
     st.header("⏱️ Gestión de Exámenes IB")
+
+    # =========================
+    # 🕒 HORA COLOMBIA (SIN BUCLE)
+    # =========================
+    ahora = datetime.datetime.now(ZoneInfo("America/Bogota"))
 
     # =========================
     # 📐 COLUMNAS
@@ -792,7 +790,9 @@ with tabs[8]:
 
         st.markdown(f"<p class='medium-text'>🕒 Fin: {fin_dt.time()}</p>", unsafe_allow_html=True)
 
+        # =========================
         # 🚻 BAÑO
+        # =========================
         if duracion > 60:
 
             st.markdown("### 🚻 Baño")
@@ -804,10 +804,10 @@ with tabs[8]:
                 salida_inicio = inicio_dt + datetime.timedelta(minutes=60)
                 salida_fin = fin_dt - datetime.timedelta(minutes=15)
 
-                st.success(f"Salida: {salida_inicio.time()} → {salida_fin.time()}")
+                st.success(f"Ventana: {salida_inicio.time()} → {salida_fin.time()}")
 
         else:
-            st.warning("Sin salida al baño")
+            st.warning("🚫 Sin salida al baño")
 
     # =========================
     # ⏱️ DERECHA (RELOJ + ESTADO)
