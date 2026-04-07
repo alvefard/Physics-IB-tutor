@@ -845,11 +845,35 @@ with tabs[9]:
     # =========================
     # ⏱️ DERECHA (RELOJ)
     # =========================
-    with col2:
+   with col2:
 
-        st.markdown("### 🕒 Hora oficial (Colombia)")
+    st.markdown("### 🕒 Hora oficial (Colombia)")
 
-        components.iframe(
-            "https://free.timeanddate.com/clock/i9x0h0z9/n225/tlco/fn7/fs72/fcfff/tct/pct/ftb/pa8/tt0/tw1/tm1/td1/th1/ts1",
-            height=300
-        )
+    components.html("""
+        <div id="clock" style="
+            font-size:60px;
+            font-weight:bold;
+            text-align:center;
+            color:white;
+        "></div>
+
+        <script>
+        function updateClock() {
+            const now = new Date();
+
+            const options = {
+                timeZone: "America/Bogota",
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false
+            };
+
+            const timeString = now.toLocaleTimeString("es-CO", options);
+            document.getElementById("clock").innerHTML = timeString;
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+        </script>
+    """, height=120)
