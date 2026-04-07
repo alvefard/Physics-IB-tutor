@@ -3,7 +3,7 @@ import streamlit as st
 import numpy as np
 import matplotlib.pyplot as plt
 import time
-
+import streamlit.components.v1 as components
 import datetime
 from zoneinfo import ZoneInfo
 from streamlit_autorefresh import st_autorefresh
