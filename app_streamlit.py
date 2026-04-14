@@ -18,7 +18,7 @@ plt.rcParams["figure.figsize"] = (6, 3)
 # =========================
 st.set_page_config(page_title="Tutor IB Física", layout="wide")
 
-st.title("PhysLab CNY")
+st.title("IB PhycsLab")
 
 col1, col2 = st.columns([1, 3])
 
