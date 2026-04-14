@@ -23,7 +23,15 @@ st.title("IB PhycsLab")
 col1, col2 = st.columns([1, 3])
 
 with col1:
-    st.image("logo-colegio-nueva-york.png", width=300)
+    st.markdown(
+        """
+        <div style="display:flex; align-items:center; justify-content:center; height:100%;">
+            <img src="logo-colegio-nueva-york.png" width="300">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+    #st.image("logo-colegio-nueva-york.png", width=300)
 
 with col2:
     st.image("logoapp2.png", width=200)
