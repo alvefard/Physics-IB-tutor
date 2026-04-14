@@ -26,7 +26,7 @@ with col1:
     st.image("logo-colegio-nueva-york.png", width=300)
 
 with col2:
-    st.image("logoapp.png", width=200)
+    st.image("logoapp2.png", width=200)
 
 tabs = st.tabs(["🧠 Tutor", "📊 Graficador", "🎛️ Simulador MUA", "🎯 Simulador Tiro parabólico", "🌌 Estrellas", "📡 Espectro EM", "🌊 Onda", "🧪 Generador", "📋 Investigación Interna", "⏱️ Exámenes IB"])
 
