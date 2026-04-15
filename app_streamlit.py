@@ -46,11 +46,24 @@ with tabs[0]:
     st.markdown("<h1 style='font-size:40px;'>🧠 Tutor IB de Física</h1>", unsafe_allow_html=True)
 
     # =========================
-    # 📥 PREGUNTA
+    # 📥 FORM (ENTER FUNCIONA)
     # =========================
-    pregunta = st.text_area("✍️ Escribe tu pregunta de Física IB:")
+    with st.form("form_tutor"):
 
-    if pregunta:
+        pregunta = st.text_area("✍️ Escribe tu pregunta de Física IB:")
+
+        submitted = st.form_submit_button("🚀 Analizar")
+
+    if submitted and pregunta:
+
+        st.session_state.pregunta_actual = pregunta
+
+    # =========================
+    # CONTINUAR SI HAY PREGUNTA
+    # =========================
+    if "pregunta_actual" in st.session_state:
+
+        pregunta = st.session_state.pregunta_actual
 
         st.markdown("## 🧭 Paso 1: Analiza la pregunta")
 
@@ -61,112 +74,105 @@ with tabs[0]:
 
         if command_est:
 
-            prompt_command = f"""
-Eres un examinador IB.
+            feedback_command = preguntar_chatgpt(f"""
+Eres examinador IB.
 
 Pregunta:
 {pregunta}
 
-El estudiante dice que el command term es:
+Command term del estudiante:
 {command_est}
 
-Evalúa:
+Responde breve:
+- Correcto o no
+- Command term correcto
+- Explicación
+""")
 
-- ¿Es correcto?
-- Explica brevemente el command term correcto
-- Da retroalimentación clara
-"""
-
-            feedback_command = preguntar_chatgpt(prompt_command)
-
-            st.markdown("### 🧪 Retroalimentación (Command Term)")
+            st.markdown("### 🧪 Retroalimentación")
             st.markdown(feedback_command)
 
         # =========================
-        # 🧠 TEMA IB
+        # 🧠 TEMA
         # =========================
-        tema_est = st.text_input("🧠 ¿Cuál es el núcleo temático (tema IB)?")
+        tema_est = st.text_input("🧠 ¿Cuál es el núcleo temático (A–E)?")
 
         if tema_est:
 
-            prompt_tema = f"""
-Eres un profesor IB.
+            feedback_tema = preguntar_chatgpt(f"""
+Eres profesor IB.
 
 Pregunta:
 {pregunta}
 
-El estudiante propone este tema:
+Tema del estudiante:
 {tema_est}
 
-Evalúa:
+Responde:
+- Correcto o no
+- Tema correcto
+- Explicación breve
+""")
 
-- ¿Es correcto?
-- Indica el tema IB correcto (A–E)
-- Explica por qué
-"""
-
-            feedback_tema = preguntar_chatgpt(prompt_tema)
-
-            st.markdown("### 📚 Retroalimentación (Tema)")
+            st.markdown("### 📚 Retroalimentación")
             st.markdown(feedback_tema)
 
         # =========================
         # 🤔 COMPRENSIÓN
         # =========================
-        comprension = st.radio(
-            "🤔 ¿Comprendes cómo abordar el problema?",
+        st.radio(
+            "🤔 ¿Comprendes el problema?",
             ["Sí", "Parcialmente", "No"]
         )
 
         # =========================
-        # 💡 HINTS PROGRESIVOS
+        # 💡 HINTS (ARREGLADOS)
         # =========================
         st.markdown("## 💡 Pistas progresivas")
 
-        if "hints_mostrados" not in st.session_state:
-            st.session_state.hints_mostrados = [False, False, False]
+        # GENERAR HINTS SOLO UNA VEZ
+        if "hints" not in st.session_state:
 
-        # BOTÓN PARA GENERAR HINTS UNA VEZ
-        if st.button("🎯 Generar guía"):
+            hints_raw = preguntar_chatgpt(f"""
+Genera EXACTAMENTE 3 pistas separadas así:
 
-            prompt_hints = f"""
-Actúa como tutor IB.
+HINT 1: ...
+HINT 2: ...
+HINT 3: ...
 
 Pregunta:
 {pregunta}
+""")
 
-Genera 3 niveles de ayuda:
+            # LIMPIEZA ROBUSTA
+            hints_limpios = []
 
-Nivel 1: conceptual
-Nivel 2: ecuaciones
-Nivel 3: casi resolución
+            for linea in hints_raw.split("\n"):
+                if "HINT" in linea.upper():
+                    hints_limpios.append(linea)
 
-No des la solución final.
-"""
+            # SI FALLA → fallback
+            if len(hints_limpios) < 3:
+                hints_limpios = [
+                    "💡 Analiza las variables del problema",
+                    "💡 Identifica la ecuación relevante",
+                    "💡 Sustituye valores cuidadosamente"
+                ]
 
-            respuesta_hints = preguntar_chatgpt(prompt_hints)
-
-            st.session_state.hints_texto = respuesta_hints
+            st.session_state.hints = hints_limpios[:3]
 
         # =========================
-        # MOSTRAR HINTS CON CHECKBOX
+        # CHECKBOX FUNCIONAL
         # =========================
-        if "hints_texto" in st.session_state:
+        for i, hint in enumerate(st.session_state.hints):
 
-            hints = st.session_state.hints_texto.split("\n")
+            if st.checkbox(f"Mostrar Hint {i+1}", key=f"hint_{i}"):
 
-            st.markdown("Marca las pistas que quieres ver:")
-
-            for i in range(3):
-
-                check = st.checkbox(f"Mostrar Hint {i+1}", key=f"hint_{i}")
-
-                if check:
-                    try:
-                        st.markdown(f"👉 {hints[i]}")
-                    except:
-                        st.markdown("👉 Hint disponible")
-
+                st.markdown(f"""
+                <div style='font-size:20px; padding:10px; background:#f0f2f6; border-radius:8px;'>
+                {hint}
+                </div>
+                """, unsafe_allow_html=True)
 # =========================
 # 📊 GRAFICADOR
 # =========================
