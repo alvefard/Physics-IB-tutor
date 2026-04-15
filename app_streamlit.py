@@ -50,125 +50,122 @@ with tabs[0]:
     # =========================
     pregunta = st.text_area("✍️ Escribe tu pregunta de Física IB:")
 
-    # =========================
-    # ✍️ RESPUESTA DEL ESTUDIANTE
-    # =========================
-    respuesta_estudiante = st.text_area("🧑‍🎓 Tu intento de respuesta (opcional):")
+    if pregunta:
 
-    # =========================
-    # 🎛️ HINTS
-    # =========================
-    if "nivel_hint" not in st.session_state:
-        st.session_state.nivel_hint = 1
-
-    col1, col2, col3 = st.columns(3)
-
-    with col1:
-        if st.button("💡 Hint +"):
-            st.session_state.nivel_hint += 1
-
-    with col2:
-        if st.button("🔄 Reiniciar"):
-            st.session_state.nivel_hint = 1
-
-    with col3:
-        if st.button("✅ Ver solución"):
-            st.session_state.nivel_hint = 4
-
-    st.info(f"Nivel de ayuda actual: {st.session_state.nivel_hint}")
-
-    # =========================
-    # 🚀 ANALIZAR
-    # =========================
-    if st.button("🚀 Analizar") and pregunta:
+        st.markdown("## 🧭 Paso 1: Analiza la pregunta")
 
         # =========================
-        # 🧠 PROMPT PRINCIPAL
+        # 🎯 COMMAND TERM
         # =========================
-        prompt = f"""
-Actúa como un tutor de Física del IB con enfoque SOCRÁTICO y como EXAMINADOR IB.
+        command_est = st.text_input("📌 ¿Cuál es el command term de la pregunta?")
 
-Nivel de ayuda: {st.session_state.nivel_hint}
+        if command_est:
 
-Responde SIEMPRE con esta estructura:
-
-1. Clasificación de la pregunta
-2. Command term IB
-3. Significado del command term
-4. Tema IB (A–E)
-5. Ecuación relevante
-6. Estrategia general
-
-Luego:
-
-Nivel 1:
-- Preguntas conceptuales
-
-Nivel 2:
-- Pistas con ecuaciones
-
-Nivel 3:
-- Sustitución parcial
-
-Nivel 4:
-- Solución completa paso a paso
-
-Pregunta:
-{pregunta}
-"""
-
-        try:
-            resultado = preguntar_chatgpt(prompt)
-
-            st.markdown("### 📘 Tutor IB")
-            st.markdown(resultado)
-
-        except Exception as e:
-            st.error(f"Error: {e}")
-
-        # =========================
-        # 🧪 EVALUACIÓN IB
-        # =========================
-        if respuesta_estudiante:
-
-            prompt_eval = f"""
-Actúa como EXAMINADOR del IB.
+            prompt_command = f"""
+Eres un examinador IB.
 
 Pregunta:
 {pregunta}
 
-Respuesta del estudiante:
-{respuesta_estudiante}
+El estudiante dice que el command term es:
+{command_est}
 
-Evalúa usando:
+Evalúa:
 
-🔎 Evaluación:
-- Correcta / Parcial / Incorrecta
-
-📊 Comentarios:
-- Conceptos
-- Ecuaciones
-- Claridad
-
-❌ Errores:
-- Específicos
-
-💡 Mejora:
-- Cómo mejorar
-
-⭐ Nivel IB:
-- Bajo / Medio / Alto
+- ¿Es correcto?
+- Explica brevemente el command term correcto
+- Da retroalimentación clara
 """
 
-            try:
-                feedback = preguntar_chatgpt(prompt_eval)
+            feedback_command = preguntar_chatgpt(prompt_command)
 
-                st.markdown("### 🧪 Evaluación tipo IB")
-                st.markdown(feedback)
+            st.markdown("### 🧪 Retroalimentación (Command Term)")
+            st.markdown(feedback_command)
 
-            except Exception as e:
-                st.error(f"Error en evaluación: {e}")
+        # =========================
+        # 🧠 TEMA IB
+        # =========================
+        tema_est = st.text_input("🧠 ¿Cuál es el núcleo temático (tema IB)?")
 
+        if tema_est:
+
+            prompt_tema = f"""
+Eres un profesor IB.
+
+Pregunta:
+{pregunta}
+
+El estudiante propone este tema:
+{tema_est}
+
+Evalúa:
+
+- ¿Es correcto?
+- Indica el tema IB correcto (A–E)
+- Explica por qué
+"""
+
+            feedback_tema = preguntar_chatgpt(prompt_tema)
+
+            st.markdown("### 📚 Retroalimentación (Tema)")
+            st.markdown(feedback_tema)
+
+        # =========================
+        # 🤔 COMPRENSIÓN
+        # =========================
+        comprension = st.radio(
+            "🤔 ¿Comprendes cómo abordar el problema?",
+            ["Sí", "Parcialmente", "No"]
+        )
+
+        # =========================
+        # 💡 HINTS PROGRESIVOS
+        # =========================
+        st.markdown("## 💡 Pistas progresivas")
+
+        if "hints_mostrados" not in st.session_state:
+            st.session_state.hints_mostrados = [False, False, False]
+
+        # BOTÓN PARA GENERAR HINTS UNA VEZ
+        if st.button("🎯 Generar guía"):
+
+            prompt_hints = f"""
+Actúa como tutor IB.
+
+Pregunta:
+{pregunta}
+
+Genera 3 niveles de ayuda:
+
+Nivel 1: conceptual
+Nivel 2: ecuaciones
+Nivel 3: casi resolución
+
+No des la solución final.
+"""
+
+            respuesta_hints = preguntar_chatgpt(prompt_hints)
+
+            st.session_state.hints_texto = respuesta_hints
+
+        # =========================
+        # MOSTRAR HINTS CON CHECKBOX
+        # =========================
+        if "hints_texto" in st.session_state:
+
+            hints = st.session_state.hints_texto.split("\n")
+
+            st.markdown("Marca las pistas que quieres ver:")
+
+            for i in range(3):
+
+                check = st.checkbox(f"Mostrar Hint {i+1}", key=f"hint_{i}")
+
+                if check:
+                    try:
+                        st.markdown(f"👉 {hints[i]}")
+                    except:
+                        st.markdown("👉 Hint disponible")
 
 # =========================
 # 📊 GRAFICADOR
