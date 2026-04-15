@@ -43,17 +43,143 @@ Desarrollado por <b>Jhon Jairo Galán Rincón</b> 🚀
 # =========================
 with tabs[0]:
 
-    st.header("🧠 Tutor IB")
+    st.markdown("<h1 style='font-size:40px;'>🧠 Tutor IB de Física</h1>", unsafe_allow_html=True)
 
-    pregunta = st.text_area("Escribe tu pregunta:")
+    # =========================
+    # 📥 PREGUNTA
+    # =========================
+    pregunta = st.text_area("✍️ Escribe tu pregunta de Física IB:")
 
-    if st.button("Analizar"):
-        if pregunta.strip():
-            with st.spinner("Analizando..."):
-                respuesta = tutor_ib_fisica(pregunta)
-            st.write(respuesta)
-        else:
-            st.warning("Escribe una pregunta")
+    # =========================
+    # ✍️ RESPUESTA DEL ESTUDIANTE
+    # =========================
+    respuesta_estudiante = st.text_area("🧑‍🎓 Tu intento de respuesta (opcional):")
+
+    # =========================
+    # 🎛️ HINTS
+    # =========================
+    if "nivel_hint" not in st.session_state:
+        st.session_state.nivel_hint = 1
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        if st.button("💡 Hint +"):
+            st.session_state.nivel_hint += 1
+
+    with col2:
+        if st.button("🔄 Reiniciar"):
+            st.session_state.nivel_hint = 1
+
+    with col3:
+        if st.button("✅ Ver solución"):
+            st.session_state.nivel_hint = 4
+
+    st.info(f"Nivel de ayuda actual: {st.session_state.nivel_hint}")
+
+    # =========================
+    # 🚀 ANALIZAR
+    # =========================
+    if st.button("🚀 Analizar") and pregunta:
+
+        # =========================
+        # 🧠 PROMPT PRINCIPAL
+        # =========================
+        prompt = f"""
+Actúa como un tutor de Física del IB con enfoque SOCRÁTICO y como EXAMINADOR IB.
+
+Nivel de ayuda: {st.session_state.nivel_hint}
+
+Responde SIEMPRE con esta estructura:
+
+1. Clasificación de la pregunta
+2. Command term IB
+3. Significado del command term
+4. Tema IB (usar solo A–E)
+5. Ecuación relevante
+6. Estrategia general
+
+Luego:
+
+Nivel 1:
+- Preguntas conceptuales
+
+Nivel 2:
+- Pistas con ecuaciones
+
+Nivel 3:
+- Sustitución parcial
+
+Nivel 4:
+- Solución completa paso a paso
+
+Pregunta:
+{pregunta}
+"""
+
+        try:
+            respuesta = client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "user", "content": prompt}]
+            )
+
+            resultado = respuesta.choices[0].message.content
+
+            st.markdown("### 📘 Tutor IB")
+            st.markdown(resultado)
+
+        except Exception as e:
+            st.error(f"Error: {e}")
+
+        # =========================
+        # 🧪 CORRECCIÓN DEL ESTUDIANTE
+        # =========================
+        if respuesta_estudiante:
+
+            prompt_eval = f"""
+Actúa como EXAMINADOR del Bachillerato Internacional (IB).
+
+Evalúa la respuesta del estudiante.
+
+Pregunta:
+{pregunta}
+
+Respuesta del estudiante:
+{respuesta_estudiante}
+
+Responde con esta estructura:
+
+🔎 Evaluación:
+- ¿Es correcta, parcialmente correcta o incorrecta?
+
+📊 Comentarios IB:
+- Precisión conceptual
+- Uso de ecuaciones
+- Claridad
+
+❌ Errores específicos:
+- Señala exactamente qué está mal
+
+💡 Mejora sugerida:
+- Cómo mejorar la respuesta
+
+⭐ Nivel estimado IB:
+- Bajo / Medio / Alto
+"""
+
+            try:
+                evaluacion = client.chat.completions.create(
+                    model="gpt-4o-mini",
+                    messages=[{"role": "user", "content": prompt_eval}]
+                )
+
+                feedback = evaluacion.choices[0].message.content
+
+                st.markdown("### 🧪 Evaluación tipo IB")
+                st.markdown(feedback)
+
+            except Exception as e:
+                st.error(f"Error en evaluación: {e}")
 
 
 # =========================
