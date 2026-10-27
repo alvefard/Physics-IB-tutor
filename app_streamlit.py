@@ -850,7 +850,6 @@ NO seas genérico. Sé específico como un evaluador IB.
         st.markdown("### 📊 Retroalimentación IA")
         st.write(feedback)
         
-
 # =========================
 # ⏱️ GESTIÓN DE EXÁMENES IB
 # =========================
@@ -858,9 +857,7 @@ NO seas genérico. Sé específico como un evaluador IB.
 with tabs[9]:
 
     st.markdown(
-        textwrap.dedent("""
-        <h1 style="font-size:42px;">⏱️ Gestión de Exámenes IB</h1>
-        """),
+        "<h1 style='font-size:42px;'>⏱️ Gestión de Exámenes IB</h1>",
         unsafe_allow_html=True
     )
 
@@ -872,9 +869,7 @@ with tabs[9]:
     with col1:
 
         st.markdown(
-            textwrap.dedent("""
-            <h2 style="font-size:32px;">🧪 Configuración</h2>
-            """),
+            "<h2 style='font-size:32px;'>🧪 Configuración</h2>",
             unsafe_allow_html=True
         )
 
@@ -934,22 +929,22 @@ with tabs[9]:
 
         # Información del examen
         st.markdown(
-            textwrap.dedent(f"""
+            f"""
             <div style="
-                font-size:38px;
+                font-size:30px;
                 font-weight:bold;
                 margin:15px 0;
                 line-height:1.25;
             ">
                 📘 {materia}
             </div>
-            <div style="font-size:26px; margin-bottom:10px;">
+            <div style="font-size:22px; margin-bottom:10px;">
                 🧪 Tipo: <b>{tipo}</b>
             </div>
-            <div style="font-size:26px; margin-bottom:20px;">
+            <div style="font-size:22px; margin-bottom:20px;">
                 ⏱️ Duración: <b>{duracion} minutos</b>
             </div>
-            """),
+            """,
             unsafe_allow_html=True
         )
 
@@ -957,9 +952,7 @@ with tabs[9]:
         # ⏰ HORA DE INICIO
         # =========================
         st.markdown(
-            textwrap.dedent("""
-            <h3 style="font-size:28px;">⏰ Hora de inicio</h3>
-            """),
+            "<h3 style='font-size:25px;'>⏰ Hora de inicio</h3>",
             unsafe_allow_html=True
         )
 
@@ -983,7 +976,7 @@ with tabs[9]:
                 key="gestion_minuto_inicio"
             )
 
-        # Fecha y hora de Colombia
+        # Hora local de Colombia
         ahora = datetime.datetime.now(ZoneInfo("America/Bogota"))
 
         inicio_dt = ahora.replace(
@@ -993,17 +986,14 @@ with tabs[9]:
             microsecond=0
         )
 
-        # Se conserva la hora elegida para planificar el examen,
-        # incluso si esa hora ya pasó hoy.
+        # Calcular finalización
         fin_dt = inicio_dt + datetime.timedelta(minutes=duracion)
 
         # =========================
         # 🚻 SALIDA AL BAÑO
         # =========================
         st.markdown(
-            textwrap.dedent("""
-            <h3 style="font-size:28px;">🚻 Salida al baño</h3>
-            """),
+            "<h3 style='font-size:25px;'>🚻 Salida al baño</h3>",
             unsafe_allow_html=True
         )
 
@@ -1013,9 +1003,9 @@ with tabs[9]:
             salida_fin = fin_dt - datetime.timedelta(minutes=15)
 
             st.markdown(
-                textwrap.dedent(f"""
+                f"""
                 <div style="
-                    font-size:26px;
+                    font-size:22px;
                     font-weight:bold;
                     padding:12px;
                     border-radius:10px;
@@ -1025,118 +1015,137 @@ with tabs[9]:
                     🚻 Desde: {salida_inicio.strftime("%H:%M:%S")}<br>
                     ⛔ Límite: {salida_fin.strftime("%H:%M:%S")}
                 </div>
-                """),
+                """,
                 unsafe_allow_html=True
             )
 
         else:
 
             st.markdown(
-                textwrap.dedent("""
-                <div style="font-size:24px; font-weight:bold;">
+                """
+                <div style="font-size:20px; font-weight:bold;">
                     🚫 No se permite salida al baño según el criterio configurado.
                 </div>
-                """),
+                """,
                 unsafe_allow_html=True
             )
 
     # =========================
     # 🕒 COLUMNA DERECHA
-    # RELOJ, INICIO, FIN Y AVISOS
     # =========================
     with col2:
 
         st.markdown(
-            textwrap.dedent("""
+            """
             <h2 style="
-                font-size:32px;
+                font-size:28px;
                 text-align:center;
             ">
                 🕒 Hora oficial de Colombia
             </h2>
-            """),
+            """,
             unsafe_allow_html=True
         )
 
-        # Reloj en vivo independiente de Streamlit
+        # =========================
+        # RELOJ EN VIVO
+        # =========================
         components.html(
-            textwrap.dedent("""
-            <div id="clock" style="
-                font-size:80px;
-                font-weight:bold;
-                text-align:center;
-                margin-top:15px;
-                color:#1565C0;
-                font-family:Arial,sans-serif;
-            ">--:--:--</div>
+            """
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {
+                        margin: 0;
+                        font-family: Arial, sans-serif;
+                    }
+                    #clock {
+                        font-size: 52px;
+                        font-weight: bold;
+                        text-align: center;
+                        margin-top: 8px;
+                        color: #1565C0;
+                    }
+                </style>
+            </head>
+            <body>
+                <div id="clock">--:--:--</div>
 
-            <script>
-            function updateClock() {
-                const now = new Date();
+                <script>
+                    function updateClock() {
+                        const now = new Date();
 
-                const options = {
-                    timeZone: "America/Bogota",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                    hour12: false
-                };
+                        const options = {
+                            timeZone: "America/Bogota",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit",
+                            hour12: false
+                        };
 
-                document.getElementById("clock").textContent =
-                    new Intl.DateTimeFormat("es-CO", options).format(now);
-            }
+                        document.getElementById("clock").textContent =
+                            new Intl.DateTimeFormat("es-CO", options).format(now);
+                    }
 
-            updateClock();
-            setInterval(updateClock, 1000);
-            </script>
-            """),
-            height=125
+                    updateClock();
+                    setInterval(updateClock, 1000);
+                </script>
+            </body>
+            </html>
+            """,
+            height=80,
+            scrolling=False
         )
 
         # =========================
         # 🟢 HORA DE INICIO Y 🔴 FIN
         # =========================
-        st.markdown(
-            textwrap.dedent(f"""
-            <div style="
-                margin-top:10px;
-                padding:20px;
-                border-radius:12px;
-                background-color:#EAF2F8;
-                color:#15324B;
-                text-align:center;
-            ">
-                <div style="
-                    font-size:26px;
-                    font-weight:bold;
-                ">
-                    🟢 HORA DE INICIO
-                </div>
+        components.html(
+            f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {{
+                        margin: 0;
+                        font-family: Arial, sans-serif;
+                    }}
+                    .panel {{
+                        box-sizing: border-box;
+                        padding: 20px;
+                        border-radius: 12px;
+                        background: #EAF2F8;
+                        color: #15324B;
+                        text-align: center;
+                    }}
+                    .label {{
+                        font-size: 22px;
+                        font-weight: bold;
+                        margin: 8px 0;
+                    }}
+                    .time {{
+                        font-size: 44px;
+                        font-weight: bold;
+                        margin-bottom: 16px;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="panel">
+                    <div class="label">🟢 HORA DE INICIO</div>
+                    <div class="time">{inicio_dt.strftime("%H:%M:%S")}</div>
 
-                <div style="
-                    font-size:48px;
-                    font-weight:bold;
-                    margin-bottom:20px;
-                ">
-                    {inicio_dt.strftime("%H:%M:%S")}
+                    <div class="label">🔴 HORA DE FINALIZACIÓN</div>
+                    <div class="time">{fin_dt.strftime("%H:%M:%S")}</div>
                 </div>
-
-                <div style="
-                    font-size:26px;
-                    font-weight:bold;
-                ">
-                    🔴 HORA DE FINALIZACIÓN
-                </div>
-
-                <div style="
-                    font-size:48px;
-                    font-weight:bold;
-                ">
-                    {fin_dt.strftime("%H:%M:%S")}
-                </div>
-            </div>
-            """),
-            unsafe_allow_html=True
+            </body>
+            </html>
+            """,
+            height=245,
+            scrolling=False
         )
 
         # =========================
@@ -1146,75 +1155,104 @@ with tabs[9]:
         aviso_5 = fin_dt - datetime.timedelta(minutes=5)
 
         st.markdown(
-            textwrap.dedent("""
+            """
             <h2 style="
-                font-size:30px;
+                font-size:27px;
                 text-align:center;
-                margin-top:25px;
+                margin-top:15px;
             ">
                 ⏳ Avisos de tiempo
             </h2>
-            """),
+            """,
             unsafe_allow_html=True
         )
 
         # =========================
         # 🟡 AVISO DE 30 MINUTOS
         # =========================
-        st.markdown(
-            textwrap.dedent(f"""
-            <div style="
-                padding:16px;
-                margin-bottom:12px;
-                border-radius:10px;
-                background-color:#FFF3CD;
-                color:#664D03;
-                text-align:center;
-            ">
-                <div style="
-                    font-size:24px;
-                    font-weight:bold;
-                ">
-                    🟡 FALTAN 30 MINUTOS
+        components.html(
+            f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {{
+                        margin: 0;
+                        font-family: Arial, sans-serif;
+                    }}
+                    .panel {{
+                        box-sizing: border-box;
+                        padding: 14px;
+                        border-radius: 10px;
+                        background: #FFF3CD;
+                        color: #664D03;
+                        text-align: center;
+                    }}
+                    .label {{
+                        font-size: 21px;
+                        font-weight: bold;
+                        margin-bottom: 8px;
+                    }}
+                    .time {{
+                        font-size: 38px;
+                        font-weight: bold;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="panel">
+                    <div class="label">🟡 FALTAN 30 MINUTOS</div>
+                    <div class="time">{aviso_30.strftime("%H:%M:%S")}</div>
                 </div>
-
-                <div style="
-                    font-size:40px;
-                    font-weight:bold;
-                ">
-                    {aviso_30.strftime("%H:%M:%S")}
-                </div>
-            </div>
-            """),
-            unsafe_allow_html=True
+            </body>
+            </html>
+            """,
+            height=105,
+            scrolling=False
         )
 
         # =========================
         # 🔴 AVISO DE 5 MINUTOS
         # =========================
-        st.markdown(
-            textwrap.dedent(f"""
-            <div style="
-                padding:16px;
-                border-radius:10px;
-                background-color:#F8D7DA;
-                color:#842029;
-                text-align:center;
-            ">
-                <div style="
-                    font-size:24px;
-                    font-weight:bold;
-                ">
-                    🔴 FALTAN 5 MINUTOS
+        components.html(
+            f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {{
+                        margin: 0;
+                        font-family: Arial, sans-serif;
+                    }}
+                    .panel {{
+                        box-sizing: border-box;
+                        padding: 14px;
+                        border-radius: 10px;
+                        background: #F8D7DA;
+                        color: #842029;
+                        text-align: center;
+                    }}
+                    .label {{
+                        font-size: 21px;
+                        font-weight: bold;
+                        margin-bottom: 8px;
+                    }}
+                    .time {{
+                        font-size: 38px;
+                        font-weight: bold;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="panel">
+                    <div class="label">🔴 FALTAN 5 MINUTOS</div>
+                    <div class="time">{aviso_5.strftime("%H:%M:%S")}</div>
                 </div>
-
-                <div style="
-                    font-size:40px;
-                    font-weight:bold;
-                ">
-                    {aviso_5.strftime("%H:%M:%S")}
-                </div>
-            </div>
-            """),
-            unsafe_allow_html=True
+            </body>
+            </html>
+            """,
+            height=105,
+            scrolling=False
         )
