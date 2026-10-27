@@ -850,6 +850,7 @@ NO seas genérico. Sé específico como un evaluador IB.
         st.markdown("### 📊 Retroalimentación IA")
         st.write(feedback)
         
+
 # =========================
 # ⏱️ GESTIÓN DE EXÁMENES IB
 # =========================
@@ -857,7 +858,9 @@ NO seas genérico. Sé específico como un evaluador IB.
 with tabs[9]:
 
     st.markdown(
-        "<h1 style='font-size:42px;'>⏱️ Gestión de Exámenes IB</h1>",
+        textwrap.dedent("""
+        <h1 style="font-size:42px;">⏱️ Gestión de Exámenes IB</h1>
+        """),
         unsafe_allow_html=True
     )
 
@@ -869,7 +872,9 @@ with tabs[9]:
     with col1:
 
         st.markdown(
-            "<h2 style='font-size:32px;'>🧪 Configuración</h2>",
+            textwrap.dedent("""
+            <h2 style="font-size:32px;">🧪 Configuración</h2>
+            """),
             unsafe_allow_html=True
         )
 
@@ -927,9 +932,9 @@ with tabs[9]:
         tipo = examen[1]
         duracion = examen[2]
 
-        # Materia en tamaño grande
+        # Información del examen
         st.markdown(
-            f"""
+            textwrap.dedent(f"""
             <div style="
                 font-size:38px;
                 font-weight:bold;
@@ -938,19 +943,13 @@ with tabs[9]:
             ">
                 📘 {materia}
             </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-        st.markdown(
-            f"""
             <div style="font-size:26px; margin-bottom:10px;">
                 🧪 Tipo: <b>{tipo}</b>
             </div>
             <div style="font-size:26px; margin-bottom:20px;">
                 ⏱️ Duración: <b>{duracion} minutos</b>
             </div>
-            """,
+            """),
             unsafe_allow_html=True
         )
 
@@ -958,7 +957,9 @@ with tabs[9]:
         # ⏰ HORA DE INICIO
         # =========================
         st.markdown(
-            "<h3 style='font-size:28px;'>⏰ Hora de inicio</h3>",
+            textwrap.dedent("""
+            <h3 style="font-size:28px;">⏰ Hora de inicio</h3>
+            """),
             unsafe_allow_html=True
         )
 
@@ -992,16 +993,17 @@ with tabs[9]:
             microsecond=0
         )
 
-        # Si la hora seleccionada ya pasó hoy, se conserva
-        # la hora elegida para permitir planificar el examen.
-
+        # Se conserva la hora elegida para planificar el examen,
+        # incluso si esa hora ya pasó hoy.
         fin_dt = inicio_dt + datetime.timedelta(minutes=duracion)
 
         # =========================
         # 🚻 SALIDA AL BAÑO
         # =========================
         st.markdown(
-            "<h3 style='font-size:28px;'>🚻 Salida al baño</h3>",
+            textwrap.dedent("""
+            <h3 style="font-size:28px;">🚻 Salida al baño</h3>
+            """),
             unsafe_allow_html=True
         )
 
@@ -1011,7 +1013,7 @@ with tabs[9]:
             salida_fin = fin_dt - datetime.timedelta(minutes=15)
 
             st.markdown(
-                f"""
+                textwrap.dedent(f"""
                 <div style="
                     font-size:26px;
                     font-weight:bold;
@@ -1023,18 +1025,18 @@ with tabs[9]:
                     🚻 Desde: {salida_inicio.strftime("%H:%M:%S")}<br>
                     ⛔ Límite: {salida_fin.strftime("%H:%M:%S")}
                 </div>
-                """,
+                """),
                 unsafe_allow_html=True
             )
 
         else:
 
             st.markdown(
-                """
+                textwrap.dedent("""
                 <div style="font-size:24px; font-weight:bold;">
                     🚫 No se permite salida al baño según el criterio configurado.
                 </div>
-                """,
+                """),
                 unsafe_allow_html=True
             )
 
@@ -1045,20 +1047,20 @@ with tabs[9]:
     with col2:
 
         st.markdown(
-            """
+            textwrap.dedent("""
             <h2 style="
                 font-size:32px;
                 text-align:center;
             ">
                 🕒 Hora oficial de Colombia
             </h2>
-            """,
+            """),
             unsafe_allow_html=True
         )
 
         # Reloj en vivo independiente de Streamlit
         components.html(
-            """
+            textwrap.dedent("""
             <div id="clock" style="
                 font-size:80px;
                 font-weight:bold;
@@ -1087,7 +1089,7 @@ with tabs[9]:
             updateClock();
             setInterval(updateClock, 1000);
             </script>
-            """,
+            """),
             height=125
         )
 
@@ -1095,7 +1097,7 @@ with tabs[9]:
         # 🟢 HORA DE INICIO Y 🔴 FIN
         # =========================
         st.markdown(
-            f"""
+            textwrap.dedent(f"""
             <div style="
                 margin-top:10px;
                 padding:20px;
@@ -1133,7 +1135,7 @@ with tabs[9]:
                     {fin_dt.strftime("%H:%M:%S")}
                 </div>
             </div>
-            """,
+            """),
             unsafe_allow_html=True
         )
 
@@ -1144,7 +1146,7 @@ with tabs[9]:
         aviso_5 = fin_dt - datetime.timedelta(minutes=5)
 
         st.markdown(
-            """
+            textwrap.dedent("""
             <h2 style="
                 font-size:30px;
                 text-align:center;
@@ -1152,13 +1154,15 @@ with tabs[9]:
             ">
                 ⏳ Avisos de tiempo
             </h2>
-            """,
+            """),
             unsafe_allow_html=True
         )
 
-        # Aviso de 30 minutos
+        # =========================
+        # 🟡 AVISO DE 30 MINUTOS
+        # =========================
         st.markdown(
-            f"""
+            textwrap.dedent(f"""
             <div style="
                 padding:16px;
                 margin-bottom:12px;
@@ -1181,13 +1185,15 @@ with tabs[9]:
                     {aviso_30.strftime("%H:%M:%S")}
                 </div>
             </div>
-            """,
+            """),
             unsafe_allow_html=True
         )
 
-        # Aviso de 5 minutos
+        # =========================
+        # 🔴 AVISO DE 5 MINUTOS
+        # =========================
         st.markdown(
-            f"""
+            textwrap.dedent(f"""
             <div style="
                 padding:16px;
                 border-radius:10px;
@@ -1209,6 +1215,6 @@ with tabs[9]:
                     {aviso_5.strftime("%H:%M:%S")}
                 </div>
             </div>
-            """,
+            """),
             unsafe_allow_html=True
         )
