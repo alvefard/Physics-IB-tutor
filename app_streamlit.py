@@ -938,10 +938,10 @@ with tabs[9]:
             ">
                 📘 {materia}
             </div>
-            <div style="font-size:22px; margin-bottom:10px;">
+            <div style="font-size:30px; margin-bottom:10px;">
                 🧪 Tipo: <b>{tipo}</b>
             </div>
-            <div style="font-size:22px; margin-bottom:20px;">
+            <div style="font-size:30px; margin-bottom:20px;">
                 ⏱️ Duración: <b>{duracion} minutos</b>
             </div>
             """,
@@ -952,7 +952,7 @@ with tabs[9]:
         # ⏰ HORA DE INICIO
         # =========================
         st.markdown(
-            "<h3 style='font-size:25px;'>⏰ Hora de inicio</h3>",
+            "<h3 style='font-size:30px;'>⏰ Hora de inicio</h3>",
             unsafe_allow_html=True
         )
 
