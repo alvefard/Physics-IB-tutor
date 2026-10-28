@@ -1122,12 +1122,12 @@ with tabs[9]:
                         text-align: center;
                     }}
                     .label {{
-                        font-size: 22px;
+                        font-size: 20px;
                         font-weight: bold;
                         margin: 8px 0;
                     }}
                     .time {{
-                        font-size: 44px;
+                        font-size: 35px;
                         font-weight: bold;
                         margin-bottom: 16px;
                     }}
