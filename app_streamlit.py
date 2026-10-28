@@ -1144,7 +1144,7 @@ with tabs[9]:
             </body>
             </html>
             """,
-            height=230,
+            height=200,
             scrolling=False
         )
 
