@@ -952,7 +952,7 @@ with tabs[9]:
         # ⏰ HORA DE INICIO
         # =========================
         st.markdown(
-            "<h3 style='font-size:15px;'>⏰ Hora de inicio</h3>",
+            "<h3 style='font-size:15px;'>⏰ Configura la hora de inicio</h3>",
             unsafe_allow_html=True
         )
 
