@@ -993,7 +993,7 @@ with tabs[9]:
         # 🚻 SALIDA AL BAÑO
         # =========================
         st.markdown(
-            "<h3 style='font-size:25px;'>🚻 Salida al baño</h3>",
+            "<h3 style='font-size:28px;'>🚻 Salida al baño</h3>",
             unsafe_allow_html=True
         )
 
@@ -1005,7 +1005,7 @@ with tabs[9]:
             st.markdown(
                 f"""
                 <div style="
-                    font-size:22px;
+                    font-size:28px;
                     font-weight:bold;
                     padding:12px;
                     border-radius:10px;
@@ -1024,7 +1024,7 @@ with tabs[9]:
             st.markdown(
                 """
                 <div style="font-size:20px; font-weight:bold;">
-                    🚫 No se permite salida al baño según el criterio configurado.
+                    🚫 No se permite salida al baño.
                 </div>
                 """,
                 unsafe_allow_html=True
