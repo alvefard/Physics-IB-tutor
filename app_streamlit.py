@@ -1062,7 +1062,7 @@ with tabs[9]:
                         font-family: Arial, sans-serif;
                     }
                     #clock {
-                        font-size: 52px;
+                        font-size: 60px;
                         font-weight: bold;
                         text-align: center;
                         margin-top: 8px;
@@ -1195,7 +1195,7 @@ with tabs[9]:
                         margin-bottom: 8px;
                     }}
                     .time {{
-                        font-size: 38px;
+                        font-size: 35px;
                         font-weight: bold;
                     }}
                 </style>
@@ -1240,7 +1240,7 @@ with tabs[9]:
                         margin-bottom: 8px;
                     }}
                     .time {{
-                        font-size: 38px;
+                        font-size: 35px;
                         font-weight: bold;
                     }}
                 </style>
