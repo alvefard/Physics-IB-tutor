@@ -909,6 +909,7 @@ with tabs[9]:
             ("Política Global NM P2", "No estructurado", 105),
             ("Política Global NS P1", "No estructurado", 75),
             ("Política Global NS P2", "No estructurado", 105),
+            ("Política Global NS P3", "No estructurado", 90),
             ("ESS NM P1", "Estructurado", 60),
             ("ESS NM P2", "Estructurado", 120),
         ]
